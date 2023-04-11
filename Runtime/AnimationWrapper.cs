@@ -1,53 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EAnimator.Ecs;
 using UnityEngine;
-using Object = System.Object;
 
 namespace EAnimator
 {
-    public abstract class EventArgs
-    {
-        public abstract string CallbackName { get; }
-        public abstract ParameterType ParameterType { get; }
-
-        public float EventTriggerTime;
-    }
-
-    public class ParameterlessEventArgs : EventArgs
-    {
-        public override string CallbackName => nameof(AnimationEventComponent.ParameterlessEventCallback);
-        public override ParameterType ParameterType => ParameterType.None;
-
-        public Action EventAction;
-    }
-
-    public class IntEventArgs : EventArgs
-    {
-        public override string CallbackName => nameof(AnimationEventComponent.IntEventCallback);
-        public override ParameterType ParameterType => ParameterType.Int;
-
-        public int Value;
-        public Action<int> EventAction;
-    }
-
-    public class StringEventArgs : EventArgs
-    {
-        public override string CallbackName => nameof(AnimationEventComponent.StringEventCallback);
-        public override ParameterType ParameterType => ParameterType.String;
-
-        public string Value;
-        public Action<string> EventAction;
-    }
-
-    public enum ParameterType
-    {
-        None,
-        Int,
-        String,
-        Object
-    }
+  
 
     public class AnimationWrapper
     {
@@ -164,6 +122,9 @@ namespace EAnimator
                     case StringEventArgs stringEventArgs:
                         AddEventInternal(stringEventArgs);
                         break;
+                    case ObjectEventArgs objectEventArgs:
+                        AddEventInternal(objectEventArgs);
+                        break;
                 }
             }
         }
@@ -204,6 +165,13 @@ namespace EAnimator
                     functionName = stringArgs.CallbackName,
                     time = stringArgs.EventTriggerTime,
                     stringParameter = stringArgs.Value,
+                    messageOptions = SendMessageOptions.DontRequireReceiver
+                },
+                ObjectEventArgs objectEventArgs => new AnimationEvent
+                {
+                    functionName = objectEventArgs.CallbackName,
+                    time = objectEventArgs.EventTriggerTime,
+                    objectReferenceParameter = objectEventArgs.Value,
                     messageOptions = SendMessageOptions.DontRequireReceiver
                 },
                 _ => throw new ArgumentOutOfRangeException(nameof(eventArgs)),

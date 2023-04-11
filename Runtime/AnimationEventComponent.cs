@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 
-namespace EAnimator.Ecs
+namespace EAnimator
 {
     public class AnimationEventComponent : MonoBehaviour
     {
         private ParameterlessEventArgs _parameterlessEventArgs;
         private IntEventArgs _intEventArgs;
         private StringEventArgs _stringEventArgs;
+        private ObjectEventArgs _objectEventArgs;
 
         public void Initialize<T>(T args) where T : EventArgs
         {
@@ -20,6 +21,9 @@ namespace EAnimator.Ecs
                     break;
                 case StringEventArgs stringEventArgs:
                     _stringEventArgs = stringEventArgs;
+                    break;
+                case ObjectEventArgs objectEventArgs:
+                    _objectEventArgs = objectEventArgs;
                     break;
             }
         }
@@ -37,6 +41,11 @@ namespace EAnimator.Ecs
         public void StringEventCallback()
         {
             _stringEventArgs.EventAction?.Invoke(_stringEventArgs.Value);
+        }   
+        
+        public void ObjectEventCallback()
+        {
+            _objectEventArgs.EventAction?.Invoke(_objectEventArgs.Value);
         }
 
     }

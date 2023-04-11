@@ -3,12 +3,10 @@
     public struct AnimationProperties
     {
         public float Speed { get; }
-
-        // Пока layer трогать не будем и возьмем по умолчанию -1
         public int Layer { get; }
         public float NormalizedTime { get; }
 
-        public static AnimationProperties New()
+        public static AnimationProperties Default()
         {
             return new AnimationProperties(1f, -1, float.NegativeInfinity);
         }
