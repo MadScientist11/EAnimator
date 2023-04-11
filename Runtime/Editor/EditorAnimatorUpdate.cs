@@ -28,7 +28,7 @@ namespace EAnimator.Editor
         {
             if (!SettingsInitialized()) return;
 
-            string[] assetGUIDs = AssetDatabase.FindAssets("t:AnimatorController", new[] { _settings.Path });
+            string[] assetGUIDs = AssetDatabase.FindAssets("t:AnimatorController", _settings.Paths);
 
             foreach (string assetGUID in assetGUIDs)
             {
@@ -68,7 +68,8 @@ namespace EAnimator.Editor
             string assetPath = AssetDatabase.GetAssetPath(animatorController);
             string folder = Path.GetDirectoryName(assetPath);
 
-            if (!ComparePaths(folder, _settings.Path)) return;
+
+            if (!_settings.Paths.Any(x => ComparePaths(folder, x))) return;
 
             foreach (ChildAnimatorState state in stateMachine.states)
             {
@@ -128,7 +129,7 @@ namespace EAnimator.Editor
         }
 
         private static bool SettingsInitialized() =>
-            _settings != null && !string.IsNullOrEmpty(_settings.Path);
+            _settings != null && _settings.Paths is { Length: > 0 };
 
         private static bool ComparePaths(string path1, string path2)
         {
