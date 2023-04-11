@@ -1,13 +1,16 @@
-﻿namespace EAnimator
+﻿using UnityEngine;
+
+namespace EAnimator
 {
     public class AnimationFactory
     {
-        private readonly UnityEngine.Animator _animator;
+        private readonly Animator _animator;
 
-        public AnimationFactory(UnityEngine.Animator animator)
+        public AnimationFactory(Animator animator)
         {
             _animator = animator;
         }
+
         public AnimationWrapper CreateAnimation(int animationHash, string animationName,
             AnimationProperties animationProperties)
         {
